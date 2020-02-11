@@ -18,6 +18,7 @@ namespace AdWorksCore3.Data.Context
         public AdWorksContext(DbContextOptions<AdWorksContext> options)
             : base(options)
         {
+            ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
         public virtual DbSet<Address> Address { get; set; }
@@ -33,15 +34,6 @@ namespace AdWorksCore3.Data.Context
         public virtual DbSet<VGetAllCategories> VGetAllCategories { get; set; }
         public virtual DbSet<VProductAndDescription> VProductAndDescription { get; set; }
         public virtual DbSet<VProductModelCatalogDescription> VProductModelCatalogDescription { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AdventureWorksLT2017;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
