@@ -27,6 +27,11 @@ namespace AdWorksCore3.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddRouting(opt =>
+            {
+                opt.LowercaseUrls = true;
+                opt.LowercaseQueryStrings = true;
+            });
             services.AddDbContext<AdWorksContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("AdWorksContext"))
                    .EnableSensitiveDataLogging());
