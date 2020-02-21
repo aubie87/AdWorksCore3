@@ -18,9 +18,9 @@ namespace AdWorksCore3.WebApi.Controllers
     public class CustomersController : AdWorksControllerBase
     {
         private readonly ILogger<CustomersController> logger;
-        private readonly AdWorksContext context;
+        private readonly ICustomerRepository context;
 
-        public CustomersController(ILogger<CustomersController> logger, AdWorksContext context)
+        public CustomersController(ILogger<CustomersController> logger, ICustomerRepository context)
         {
             this.logger = logger;
             this.context = context;
@@ -30,29 +30,31 @@ namespace AdWorksCore3.WebApi.Controllers
         public async Task<ActionResult<IEnumerable<CustomerGetViewModel>>> List()
         {
             logger.LogInformation("Getting list of customers using viewmodel class - approx last 100 only, reverse Id order");
-            return await context.Customer
-                .Skip(700)
-                .OrderByDescending(o=>o.CustomerId)
-                .Include(c=>c.CustomerAddress)
-                .ThenInclude(ca=>ca.Address)
-                .Select(c => CustomerGetViewModel.FromCustomerEntity(c)) 
-                .ToListAsync();
+            //return await context.Customer
+            //    .Skip(700)
+            //    .OrderByDescending(o=>o.CustomerId)
+            //    .Include(c=>c.CustomerAddress)
+            //    .ThenInclude(ca=>ca.Address)
+            //    .Select(c => CustomerGetViewModel.FromCustomerEntity(c)) 
+            //    .ToListAsync();
+            return await context.ListAsync();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerGetViewModel>> GetById(int id)
         {
             logger.LogInformation($"Get customer where id = {id}");
-            CustomerGetViewModel customer = await context.Customer
-                .Where(c => c.CustomerId == id)
-                .Include(c => c.CustomerAddress)
-                .ThenInclude(ca => ca.Address)
-                .Select(c => CustomerGetViewModel.FromCustomerEntity(c))
-                .FirstOrDefaultAsync();
+            //CustomerGetViewModel customer = await context.Customer
+            //    .Where(c => c.CustomerId == id)
+            //    .Include(c => c.CustomerAddress)
+            //    .ThenInclude(ca => ca.Address)
+            //    .Select(c => CustomerGetViewModel.FromCustomerEntity(c))
+            //    .FirstOrDefaultAsync();
+            CustomerGetViewModel customer = await context.GetByIdAsync(id);
 
             if(null == customer)
             {
-                return NotFound();
+                return NotFound(id);
             }
             return Ok(customer);
         }
@@ -65,9 +67,10 @@ namespace AdWorksCore3.WebApi.Controllers
 
             try
             {
-                context.Customer.Add(customerDb);
-                int result = await context.SaveChangesAsync();
-                CustomerGetViewModel vm = CustomerGetViewModel.FromCustomerEntity(customerDb);
+                //context.Customer.Add(customerDb);
+                //int result = await context.SaveChangesAsync();
+                //CustomerGetViewModel vm = CustomerGetViewModel.FromCustomerEntity(customerDb);
+                CustomerGetViewModel vm = await context.AddAsync(customerVm);
                 return CreatedAtAction(nameof(GetById), new { id = vm.Id }, vm);
             }
             catch (DbUpdateConcurrencyException dbuce)
@@ -84,22 +87,25 @@ namespace AdWorksCore3.WebApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] CustomerUpdateViewModel vm, int id)
         {
-            Customer customerDb = await context.Customer.FindAsync(id);
-            if(customerDb == null)
+            //Customer customerDb = await context.Customer.FindAsync(id);
+            //if(customerDb == null)
+            if(!await context.IdExistsAsync(id))
             {
                 // should PUT create the resource or error out?
                 return NotFound();
             }
 
-            customerDb.FirstName = vm.FirstName;
-            customerDb.MiddleName = vm.MiddleName;
-            customerDb.LastName = vm.LastName;
-            customerDb.EmailAddress = vm.EmailAddress;
-            customerDb.Phone = vm.Phone;
-            customerDb.Suffix = vm.Suffix;
-            customerDb.Title = vm.Title;
-            context.Entry(customerDb).State = EntityState.Modified;
-            await context.SaveChangesAsync();
+            await context.UpdateAsync(vm);
+
+            //customerDb.FirstName = vm.FirstName;
+            //customerDb.MiddleName = vm.MiddleName;
+            //customerDb.LastName = vm.LastName;
+            //customerDb.EmailAddress = vm.EmailAddress;
+            //customerDb.Phone = vm.Phone;
+            //customerDb.Suffix = vm.Suffix;
+            //customerDb.Title = vm.Title;
+            //context.Entry(customerDb).State = EntityState.Modified;
+            //await context.SaveChangesAsync();
 
             return NoContent();
         }
@@ -107,15 +113,17 @@ namespace AdWorksCore3.WebApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Customer customer = await context.Customer.FindAsync(id);
-            if(customer == null)
+            //Customer customer = await context.Customer.FindAsync(id);
+            //if(customer == null)
+            if(!await context.IdExistsAsync(id))
             {
                 return NotFound("Unable to delete give key value.");
             }
 
-            context.Customer.Remove(customer);
-            int result = await context.SaveChangesAsync();
-            logger.LogInformation($"SaveChanges={result}");
+            //context.Customer.Remove(customer);
+            //int result = await context.SaveChangesAsync();
+            await context.Delete(id);
+            logger.LogInformation($"Deleted customer {id}");
             return NoContent();
         }
     }

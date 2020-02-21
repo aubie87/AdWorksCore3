@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdWorksCore3.Cmd", "AdWorksCore3.Cmd\AdWorksCore3.Cmd.csproj", "{F096A7BB-497A-401B-B5CB-321C030E46A5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWorksCore3.Cmd", "AdWorksCore3.Cmd\AdWorksCore3.Cmd.csproj", "{F096A7BB-497A-401B-B5CB-321C030E46A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdWorksCore3.Data", "AdWorksCore3.Data\AdWorksCore3.Data.csproj", "{D9EB0662-E8DC-4390-BEEC-4557720317DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWorksCore3.Data", "AdWorksCore3.Data\AdWorksCore3.Data.csproj", "{D9EB0662-E8DC-4390-BEEC-4557720317DF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdWorksCore3.WebApi", "AdWorksCore3.WebApi\AdWorksCore3.WebApi.csproj", "{38499496-2148-4B28-B9A0-7B5905D7123E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWorksCore3.WebApi", "AdWorksCore3.WebApi\AdWorksCore3.WebApi.csproj", "{38499496-2148-4B28-B9A0-7B5905D7123E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdWorksCore3.WebApi.Test", "AdWorksCore3.WebApi.Test\AdWorksCore3.WebApi.Test.csproj", "{860BDD14-6336-472F-8848-CE5567C242B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{38499496-2148-4B28-B9A0-7B5905D7123E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38499496-2148-4B28-B9A0-7B5905D7123E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38499496-2148-4B28-B9A0-7B5905D7123E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{860BDD14-6336-472F-8848-CE5567C242B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{860BDD14-6336-472F-8848-CE5567C242B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{860BDD14-6336-472F-8848-CE5567C242B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{860BDD14-6336-472F-8848-CE5567C242B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
