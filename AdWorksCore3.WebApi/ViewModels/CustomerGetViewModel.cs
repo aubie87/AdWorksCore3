@@ -25,7 +25,7 @@ namespace AdWorksCore3.WebApi.ViewModels
         /// </summary>
         /// <param name="customer"></param>
         /// <returns></returns>
-        internal static CustomerGetViewModel FromCustomerEntity(Customer customer)
+        public static CustomerGetViewModel FromCustomerEntity(Customer customer)
         {
             return new CustomerGetViewModel
             {

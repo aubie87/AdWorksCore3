@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AdWorksCore3.Data.Context;
+using AdWorksCore3.WebApi.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +29,13 @@ namespace AdWorksCore3.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
+                opt.ApiVersionReader = new HeaderApiVersionReader("x-api-version");
+            });
             services.AddRouting(opt =>
             {
                 opt.LowercaseUrls = true;
@@ -35,7 +44,15 @@ namespace AdWorksCore3.WebApi
             services.AddDbContext<AdWorksContext>(opt =>
                 opt.UseSqlServer(Configuration.GetConnectionString("AdWorksContext"))
                    .EnableSensitiveDataLogging());
+
+            // provides a factory method to implement a custom instance
+            //services.AddScoped<IRepository>(GetRepository);
         }
+
+        //private IRepository GetRepository(IServiceProvider provider)
+        //{
+        //    return provider.GetService();
+        //}
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

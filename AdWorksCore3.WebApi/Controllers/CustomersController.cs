@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace AdWorksCore3.WebApi.Controllers
 {
+    [ApiVersion("2.0")]
     public class CustomersController : AdWorksControllerBase
     {
         private readonly ILogger<CustomersController> logger;

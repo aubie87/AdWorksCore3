@@ -7,30 +7,35 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AdWorksCore3.Data.Context;
 using AdWorksCore3.Data.Entities;
+using Microsoft.Extensions.Logging;
+using AdWorksCore3.WebApi.ViewModels;
 
 namespace AdWorksCore3.WebApi.Controllers
 {
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
     [ApiController]
     public class ProductsController : ControllerBase
     {
+        private readonly ILogger<CustomersController> logger;
         private readonly AdWorksContext _context;
 
-        public ProductsController(AdWorksContext context)
+        public ProductsController(ILogger<CustomersController> logger, AdWorksContext context)
         {
+            this.logger = logger;
             _context = context;
         }
 
-        // GET: api/Products
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProduct()
+        public async Task<ActionResult<IEnumerable<ProductGetViewModel>>> GetProduct()
         {
-            return await _context.Product.ToListAsync();
+            return await _context.Product
+                .Select(p=>ProductGetViewModel.FromProductEntity(p))
+                .ToListAsync();
         }
 
-        // GET: api/Products/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductGetViewModel>> GetProduct(int id)
         {
             var product = await _context.Product.FindAsync(id);
 
@@ -39,7 +44,7 @@ namespace AdWorksCore3.WebApi.Controllers
                 return NotFound();
             }
 
-            return product;
+            return ProductGetViewModel.FromProductEntity(product);
         }
 
         // PUT: api/Products/5
