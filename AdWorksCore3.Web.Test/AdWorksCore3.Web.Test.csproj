@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AdWorksCore3.WebApi\AdWorksCore3.Web.csproj" />
+    <ProjectReference Include="..\AdWorksCore3.Web\AdWorksCore3.Web.csproj" />
   </ItemGroup>
 
 </Project>
