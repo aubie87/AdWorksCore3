@@ -37,7 +37,7 @@ namespace AdWorksCore3.WebApi.Controllers
             //    .ThenInclude(ca=>ca.Address)
             //    .Select(c => CustomerGetViewModel.FromCustomerEntity(c)) 
             //    .ToListAsync();
-            return await context.ListAsync();
+            return Ok(await context.ListAsync());
         }
 
         [HttpGet("{id}")]
@@ -60,7 +60,7 @@ namespace AdWorksCore3.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerGetViewModel>> PostCustomer([FromBody] CustomerUpdateViewModel customerVm)
+        public async Task<ActionResult<CustomerGetViewModel>> Create([FromBody] CustomerUpdateViewModel customerVm)
         {
             Customer customerDb = CustomerUpdateViewModel.ToCustomerEntity(customerVm);
             customerDb = PasswordService.GenerateNewHash(customerDb, customerDb.FirstName + customerDb.LastName);

@@ -10,7 +10,7 @@ namespace AdWorksCore3.WebApi.Services
     public interface ICustomerRepository
     {
         Task<CustomerGetViewModel> GetByIdAsync(int id);
-        Task<List<CustomerGetViewModel>> ListAsync();
+        Task<IEnumerable<CustomerGetViewModel>> ListAsync();
         Task<CustomerGetViewModel> AddAsync(CustomerUpdateViewModel customer);
         Task UpdateAsync(CustomerUpdateViewModel customer);
         Task<bool> IdExistsAsync(int id);
