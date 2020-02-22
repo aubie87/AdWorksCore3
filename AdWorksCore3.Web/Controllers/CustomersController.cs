@@ -1,5 +1,5 @@
-﻿using AdWorksCore3.Data.Context;
-using AdWorksCore3.Data.Entities;
+﻿using AdWorksCore3.Infrastructure.Context;
+using AdWorksCore3.Infrastructure.Entities;
 using AdWorksCore3.Web.Services;
 using AdWorksCore3.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;

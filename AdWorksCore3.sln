@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWorksCore3.Cmd", "AdWorksCore3.Cmd\AdWorksCore3.Cmd.csproj", "{F096A7BB-497A-401B-B5CB-321C030E46A5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWorksCore3.Infrastructure", "AdWorksCore3.Data\AdWorksCore3.Infrastructure.csproj", "{D9EB0662-E8DC-4390-BEEC-4557720317DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWorksCore3.Infrastructure", "AdWorksCore3.Infrastructure\AdWorksCore3.Infrastructure.csproj", "{D9EB0662-E8DC-4390-BEEC-4557720317DF}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdWorksCore3.Web.Test", "AdWorksCore3.Web.Test\AdWorksCore3.Web.Test.csproj", "{860BDD14-6336-472F-8848-CE5567C242B5}"
 EndProject

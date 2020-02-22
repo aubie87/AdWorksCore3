@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AdWorksCore3.Data.Context;
-using AdWorksCore3.Data.Entities;
+using AdWorksCore3.Infrastructure.Context;
+using AdWorksCore3.Infrastructure.Entities;
 using Microsoft.Extensions.Logging;
 using AdWorksCore3.Web.ViewModels;
 

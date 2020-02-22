@@ -1,4 +1,4 @@
-﻿using AdWorksCore3.Data.Entities;
+﻿using AdWorksCore3.Infrastructure.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

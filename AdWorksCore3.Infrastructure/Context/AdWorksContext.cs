@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using AdWorksCore3.Data.Entities;
+using AdWorksCore3.Infrastructure.Entities;
 
-namespace AdWorksCore3.Data.Context
+namespace AdWorksCore3.Infrastructure.Context
 {
     /// <summary>
     /// Generated via:

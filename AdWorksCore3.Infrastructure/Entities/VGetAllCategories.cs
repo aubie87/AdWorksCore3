@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AdWorksCore3.Data.Entities
+namespace AdWorksCore3.Infrastructure.Entities
 {
     public partial class VGetAllCategories
     {
