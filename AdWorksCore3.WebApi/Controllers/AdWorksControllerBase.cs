@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdWorksCore3.WebApi.Controllers
+namespace AdWorksCore3.Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

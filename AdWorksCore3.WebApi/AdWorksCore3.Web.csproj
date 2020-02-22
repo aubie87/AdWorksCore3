@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AdWorksCore3.Data\AdWorksCore3.Data.csproj" />
+    <ProjectReference Include="..\AdWorksCore3.Data\AdWorksCore3.Infrastructure.csproj" />
   </ItemGroup>
 
 

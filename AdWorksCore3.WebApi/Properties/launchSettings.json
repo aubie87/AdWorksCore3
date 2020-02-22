@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "AdWorksCore3.WebApi": {
+    "AdWorksCore3.Web": {
       "commandName": "Project",
       "launchBrowser": false,
       "launchUrl": "api/customers",

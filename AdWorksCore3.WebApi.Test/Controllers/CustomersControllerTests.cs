@@ -1,6 +1,6 @@
-﻿using AdWorksCore3.WebApi.Controllers;
-using AdWorksCore3.WebApi.Services;
-using AdWorksCore3.WebApi.ViewModels;
+﻿using AdWorksCore3.Web.Controllers;
+using AdWorksCore3.Web.Services;
+using AdWorksCore3.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AdWorksCore3.WebApi.Test.Controllers
+namespace AdWorksCore3.Web.Test.Controllers
 {
     public class CustomersControllerTests
     {

@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using AdWorksCore3.Data.Context;
 using AdWorksCore3.Data.Entities;
 using Microsoft.Extensions.Logging;
-using AdWorksCore3.WebApi.ViewModels;
+using AdWorksCore3.Web.ViewModels;
 
-namespace AdWorksCore3.WebApi.Controllers
+namespace AdWorksCore3.Web.Controllers
 {
     [ApiVersion("1.0")]
     [Route("api/[controller]")]

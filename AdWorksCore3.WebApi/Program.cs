@@ -8,7 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace AdWorksCore3.WebApi
+namespace AdWorksCore3.Web
 {
     public class Program
     {

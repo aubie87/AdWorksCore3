@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdWorksCore3.WebApi.Services
+namespace AdWorksCore3.Web.Services
 {
     public interface IRepository
     {

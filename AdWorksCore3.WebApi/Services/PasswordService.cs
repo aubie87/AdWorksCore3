@@ -4,7 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Security.Cryptography;
 
-namespace AdWorksCore3.WebApi.Services
+namespace AdWorksCore3.Web.Services
 {
     public class PasswordService
     {

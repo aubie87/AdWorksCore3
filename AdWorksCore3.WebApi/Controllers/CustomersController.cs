@@ -1,7 +1,7 @@
 ﻿using AdWorksCore3.Data.Context;
 using AdWorksCore3.Data.Entities;
-using AdWorksCore3.WebApi.Services;
-using AdWorksCore3.WebApi.ViewModels;
+using AdWorksCore3.Web.Services;
+using AdWorksCore3.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdWorksCore3.WebApi.Controllers
+namespace AdWorksCore3.Web.Controllers
 {
     [ApiVersion("2.0")]
     public class CustomersController : AdWorksControllerBase

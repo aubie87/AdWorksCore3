@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AdWorksCore3.WebApi
+namespace AdWorksCore3.Web
 {
     public class CustomerUpdateViewModel
     {

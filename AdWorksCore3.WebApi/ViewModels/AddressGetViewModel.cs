@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AdWorksCore3.WebApi.ViewModels
+namespace AdWorksCore3.Web.ViewModels
 {
     public class AddressGetViewModel
     {
