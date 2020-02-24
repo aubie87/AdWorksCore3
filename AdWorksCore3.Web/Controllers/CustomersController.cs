@@ -1,16 +1,13 @@
-﻿using AdWorksCore3.Infrastructure.Context;
-using AdWorksCore3.Infrastructure.Entities;
+﻿using AdWorksCore3.Core.Entities;
 using AdWorksCore3.Web.Services;
 using AdWorksCore3.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using AdWorksCore3.Core.Interfaces;
+using System.Linq;
 
 namespace AdWorksCore3.Web.Controllers
 {
@@ -18,60 +15,45 @@ namespace AdWorksCore3.Web.Controllers
     public class CustomersController : AdWorksControllerBase
     {
         private readonly ILogger<CustomersController> logger;
-        private readonly ICustomerRepository context;
+        private readonly ICustomerRepository repository;
 
         public CustomersController(ILogger<CustomersController> logger, ICustomerRepository context)
         {
             this.logger = logger;
-            this.context = context;
+            this.repository = context;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerGetViewModel>>> List()
         {
             logger.LogInformation("Getting list of customers using viewmodel class - approx last 100 only, reverse Id order");
-            //return await context.Customer
-            //    .Skip(700)
-            //    .OrderByDescending(o=>o.CustomerId)
-            //    .Include(c=>c.CustomerAddress)
-            //    .ThenInclude(ca=>ca.Address)
-            //    .Select(c => CustomerGetViewModel.FromCustomerEntity(c)) 
-            //    .ToListAsync();
-            return Ok(await context.ListAsync());
+            var customerList = await repository.ListAsync();
+            return Ok(customerList.Select(c => CustomerGetViewModel.FromCustomerEntity(c)));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<CustomerGetViewModel>> GetById(int id)
         {
             logger.LogInformation($"Get customer where id = {id}");
-            //CustomerGetViewModel customer = await context.Customer
-            //    .Where(c => c.CustomerId == id)
-            //    .Include(c => c.CustomerAddress)
-            //    .ThenInclude(ca => ca.Address)
-            //    .Select(c => CustomerGetViewModel.FromCustomerEntity(c))
-            //    .FirstOrDefaultAsync();
-            CustomerGetViewModel customer = await context.GetByIdAsync(id);
-
+            Customer customer = await repository.GetByIdAsync(id);
             if(null == customer)
             {
                 return NotFound(id);
             }
-            return Ok(customer);
+            CustomerGetViewModel vm = CustomerGetViewModel.FromCustomerEntity(customer);
+            return Ok(vm);
         }
 
         [HttpPost]
-        public async Task<ActionResult<CustomerGetViewModel>> Create([FromBody] CustomerUpdateViewModel customerVm)
+        public async Task<ActionResult<CustomerGetViewModel>> Create([FromBody] CustomerUpdateViewModel updateVm)
         {
-            Customer customerDb = CustomerUpdateViewModel.ToCustomerEntity(customerVm);
+            Customer customerDb = CustomerUpdateViewModel.ToCustomerEntity(updateVm);
             customerDb = PasswordService.GenerateNewHash(customerDb, customerDb.FirstName + customerDb.LastName);
-
             try
             {
-                //context.Customer.Add(customerDb);
-                //int result = await context.SaveChangesAsync();
-                //CustomerGetViewModel vm = CustomerGetViewModel.FromCustomerEntity(customerDb);
-                CustomerGetViewModel vm = await context.AddAsync(customerVm);
-                return CreatedAtAction(nameof(GetById), new { id = vm.Id }, vm);
+                customerDb = await repository.AddAsync(customerDb);
+                CustomerGetViewModel getVm = CustomerGetViewModel.FromCustomerEntity(customerDb);
+                return CreatedAtAction(nameof(GetById), new { id = getVm.Id }, getVm);
             }
             catch (DbUpdateConcurrencyException dbuce)
             {
@@ -87,25 +69,15 @@ namespace AdWorksCore3.Web.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update([FromBody] CustomerUpdateViewModel vm, int id)
         {
-            //Customer customerDb = await context.Customer.FindAsync(id);
-            //if(customerDb == null)
-            if(!await context.IdExistsAsync(id))
+            Customer customer = await repository.GetByIdAsync(id);
+            if(customer == null)
             {
                 // should PUT create the resource or error out?
                 return NotFound();
             }
 
-            await context.UpdateAsync(vm);
-
-            //customerDb.FirstName = vm.FirstName;
-            //customerDb.MiddleName = vm.MiddleName;
-            //customerDb.LastName = vm.LastName;
-            //customerDb.EmailAddress = vm.EmailAddress;
-            //customerDb.Phone = vm.Phone;
-            //customerDb.Suffix = vm.Suffix;
-            //customerDb.Title = vm.Title;
-            //context.Entry(customerDb).State = EntityState.Modified;
-            //await context.SaveChangesAsync();
+            customer = CustomerUpdateViewModel.ToCustomerEntity(customer, vm);
+            await repository.UpdateAsync(customer);
 
             return NoContent();
         }
@@ -113,16 +85,12 @@ namespace AdWorksCore3.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            //Customer customer = await context.Customer.FindAsync(id);
-            //if(customer == null)
-            if(!await context.IdExistsAsync(id))
+            if(!await repository.IdExistsAsync(id))
             {
-                return NotFound("Unable to delete give key value.");
+                return NotFound("Unable to delete given key value.");
             }
 
-            //context.Customer.Remove(customer);
-            //int result = await context.SaveChangesAsync();
-            await context.Delete(id);
+            await repository.Delete(id);
             logger.LogInformation($"Deleted customer {id}");
             return NoContent();
         }

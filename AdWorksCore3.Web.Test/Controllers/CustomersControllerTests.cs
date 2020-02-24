@@ -1,4 +1,6 @@
-﻿using AdWorksCore3.Web.Controllers;
+﻿using AdWorksCore3.Core.Entities;
+using AdWorksCore3.Core.Interfaces;
+using AdWorksCore3.Web.Controllers;
 using AdWorksCore3.Web.Services;
 using AdWorksCore3.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -71,26 +74,32 @@ namespace AdWorksCore3.Web.Test.Controllers
             Assert.Equal(count, model.Count());
         }
 
-        [Fact(Skip = "Need to fix testing error.")]
+        [Fact]
         public async Task ForCustomer_Create_ValidCustomer()
         {
             // Arrange
+            int newId = 101;
+            Customer retCustomer = GetTestCustomer(newId);
             var mockLogger = new Mock<ILogger<CustomersController>>();
             var mockRepository = new Mock<ICustomerRepository>();
-            mockRepository.Setup(repo => repo.AddAsync(GetTestUpdate()))
-                .ReturnsAsync(GetTestCustomer(1));
+            // Tell Moq to match on any customer instance
+            mockRepository.Setup(repo => repo.AddAsync(It.IsAny<Customer>()))
+                .ReturnsAsync(retCustomer);
             var controller = new CustomersController(mockLogger.Object, mockRepository.Object);
 
             // Act
-            var result = await controller.Create(GetTestUpdate());
+            var result = await controller.Create(CustomerUpdateViewModel.FromCustomerEntity(GetTestUpdate()));
 
             // Assert
-            var apiResult = Assert.IsType<BadRequestObjectResult>(result.Result);
+            var apiResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+            var model = Assert.IsAssignableFrom<CustomerGetViewModel>(apiResult.Value);
+            Assert.Equal(newId, model.Id);
         }
 
-        private CustomerUpdateViewModel GetTestUpdate()
+        private Customer GetTestUpdate()
         {
-            return new CustomerUpdateViewModel
+            Debug.WriteLine("GetTestUpdate - no ID");
+            return new Customer
             {
                 FirstName = "Betty",
                 LastName = "Baker",
@@ -98,20 +107,18 @@ namespace AdWorksCore3.Web.Test.Controllers
             };
         }
 
-        private CustomerGetViewModel GetTestCustomer(int id)
+        private Customer GetTestCustomer(int id)
         {
-            return new CustomerGetViewModel
-            {
-                Id = id,
-                FirstName = "Abe",
-                LastName = "Abrams",
-                LastModified = DateTime.Now
-            };
+            Debug.WriteLine("GetTestCustomer - with id=" + id);
+            Customer customer = GetTestUpdate();
+            customer.CustomerId = id;
+            customer.Rowguid = Guid.Parse("48919bc6-1c78-41e7-b2c9-3804dc49c552");
+            return customer;
         }
 
-        private IEnumerable<CustomerGetViewModel> GetTestCustomerList(int count)
+        private IEnumerable<Customer> GetTestCustomerList(int count)
         {
-            List<CustomerGetViewModel> list = new List<CustomerGetViewModel>(count);
+            List<Customer> list = new List<Customer>(count);
             int startingId = 101;
             for(int i = startingId; i< startingId+count; i++)
             {

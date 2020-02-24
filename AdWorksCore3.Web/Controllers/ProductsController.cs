@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AdWorksCore3.Infrastructure.Context;
-using AdWorksCore3.Infrastructure.Entities;
+using AdWorksCore3.Core.Entities;
 using Microsoft.Extensions.Logging;
 using AdWorksCore3.Web.ViewModels;
 

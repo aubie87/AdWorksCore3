@@ -1,4 +1,4 @@
-﻿using AdWorksCore3.Infrastructure.Entities;
+﻿using AdWorksCore3.Core.Entities;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using System;
 using System.Diagnostics;

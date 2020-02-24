@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AdWorksCore3.Core.Interfaces;
 using AdWorksCore3.Infrastructure.Context;
+using AdWorksCore3.Infrastructure.Repository;
 using AdWorksCore3.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -47,6 +49,7 @@ namespace AdWorksCore3.Web
 
             // provides a factory method to implement a custom instance
             //services.AddScoped<IRepository>(GetRepository);
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
         }
 
         //private IRepository GetRepository(IServiceProvider provider)
