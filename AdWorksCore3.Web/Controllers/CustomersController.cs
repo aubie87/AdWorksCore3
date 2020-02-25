@@ -2,12 +2,12 @@
 using AdWorksCore3.Web.Services;
 using AdWorksCore3.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AdWorksCore3.Core.Interfaces;
 using System.Linq;
+using System;
 
 namespace AdWorksCore3.Web.Controllers
 {
@@ -55,13 +55,9 @@ namespace AdWorksCore3.Web.Controllers
                 CustomerGetViewModel getVm = CustomerGetViewModel.FromCustomerEntity(customerDb);
                 return CreatedAtAction(nameof(GetById), new { id = getVm.Id }, getVm);
             }
-            catch (DbUpdateConcurrencyException dbuce)
+            catch (Exception e)
             {
-                logger.LogError(dbuce, "Saving changes for new customer failed.");
-            }
-            catch (DbUpdateException dbue)
-            {
-                logger.LogError(dbue, "Saving changes for new customer failed.");
+                logger.LogError(e, "Saving changes for new customer failed.");
             }
             return BadRequest();
         }

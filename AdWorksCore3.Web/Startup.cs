@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AdWorksCore3.Core.Interfaces;
-using AdWorksCore3.Infrastructure.Context;
-using AdWorksCore3.Infrastructure.Repository;
+using AdWorksCore3.Infrastructure;
 using AdWorksCore3.Web.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,13 +42,8 @@ namespace AdWorksCore3.Web
                 opt.LowercaseUrls = true;
                 opt.LowercaseQueryStrings = true;
             });
-            services.AddDbContext<AdWorksContext>(opt =>
-                opt.UseSqlServer(Configuration.GetConnectionString("AdWorksContext"))
-                   .EnableSensitiveDataLogging());
 
-            // provides a factory method to implement a custom instance
-            //services.AddScoped<IRepository>(GetRepository);
-            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            Infrastructure.Infrastructure.ConfigureServices(Configuration, services);
         }
 
         //private IRepository GetRepository(IServiceProvider provider)

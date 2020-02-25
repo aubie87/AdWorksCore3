@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using AdWorksCore3.Infrastructure.Context;
 using AdWorksCore3.Core.Entities;
 using Microsoft.Extensions.Logging;
 using AdWorksCore3.Web.ViewModels;
+using AdWorksCore3.Core.Interfaces;
+using System;
 
 namespace AdWorksCore3.Web.Controllers
 {
@@ -18,26 +16,25 @@ namespace AdWorksCore3.Web.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<CustomersController> logger;
-        private readonly AdWorksContext _context;
+        private readonly IProductRepository repository;
 
-        public ProductsController(ILogger<CustomersController> logger, AdWorksContext context)
+        public ProductsController(ILogger<CustomersController> logger, IProductRepository repository)
         {
             this.logger = logger;
-            _context = context;
+            this.repository = repository;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ProductGetViewModel>>> GetProduct()
         {
-            return await _context.Product
-                .Select(p=>ProductGetViewModel.FromProductEntity(p))
-                .ToListAsync();
+            var productList = await repository.ListAsync();
+            return Ok(productList.Select(p => ProductGetViewModel.FromProductEntity(p)));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductGetViewModel>> GetProduct(int id)
         {
-            var product = await _context.Product.FindAsync(id);
+            var product = await repository.GetByIdAsync(id);
 
             if (product == null)
             {
@@ -58,21 +55,19 @@ namespace AdWorksCore3.Web.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(product).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                await repository.UpdateAsync(product);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception e)
             {
-                if (!ProductExists(id))
+                if (!await ProductExists(id))
                 {
                     return NotFound();
                 }
                 else
                 {
-                    throw;
+                    throw e;
                 }
             }
 
@@ -85,8 +80,7 @@ namespace AdWorksCore3.Web.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            _context.Product.Add(product);
-            await _context.SaveChangesAsync();
+            await repository.AddAsync(product);
 
             return CreatedAtAction("GetProduct", new { id = product.ProductId }, product);
         }
@@ -95,21 +89,19 @@ namespace AdWorksCore3.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Product>> DeleteProduct(int id)
         {
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
+            if (!await repository.IdExistsAsync(id))
             {
                 return NotFound();
             }
 
-            _context.Product.Remove(product);
-            await _context.SaveChangesAsync();
+            await repository.Delete(id);
 
-            return product;
+            return NoContent();
         }
 
-        private bool ProductExists(int id)
+        private async Task<bool> ProductExists(int id)
         {
-            return _context.Product.Any(e => e.ProductId == id);
+            return await repository.IdExistsAsync(id);
         }
     }
 }

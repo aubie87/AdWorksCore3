@@ -4,6 +4,7 @@ using AdWorksCore3.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,17 +21,27 @@ namespace AdWorksCore3.Infrastructure.Repository
         }
         public async Task<Customer> AddAsync(Customer customer)
         {
-            context.Customer.Add(customer);
-            await context.SaveChangesAsync();
-            return customer;
+            try
+            {
+                context.Customer.Add(customer);
+                await context.SaveChangesAsync();
+                return customer;
+            }
+            catch (DbUpdateConcurrencyException dbuce)
+            {
+                //logger.LogError(dbuce, "Saving changes for new customer failed.");
+                Debug.WriteLine(dbuce, "Saving changes for new customer failed.");
+                throw dbuce;
+            }
+            catch (DbUpdateException dbue)
+            {
+                Debug.WriteLine(dbue, "Saving changes for new customer failed.");
+                throw dbue;
+            }
         }
 
         public async Task Delete(int id)
         {
-            //Customer customer = await GetByIdAsync(id);
-            //context.Customer.Remove(customer);
-            //await context.SaveChangesAsync();
-
             // trick EF to think its tracking a deleted object - then save changes
             Customer customer = new Customer() { CustomerId = id };
             context.Entry(customer).State = EntityState.Deleted;
