@@ -81,14 +81,16 @@ namespace AdWorksCore3.Web.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            if(!await repository.IdExistsAsync(id))
+            logger.LogInformation($"Deleting customer {id}");
+
+            if (await repository.Delete(id))
+            {
+                return NoContent();
+            }
+            else
             {
                 return NotFound("Unable to delete given key value.");
             }
-
-            await repository.Delete(id);
-            logger.LogInformation($"Deleted customer {id}");
-            return NoContent();
         }
     }
 }

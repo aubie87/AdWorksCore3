@@ -11,6 +11,6 @@ namespace AdWorksCore3.Core.Interfaces
         Task<Customer> AddAsync(Customer customer);
         Task UpdateAsync(Customer customer);
         Task<bool> IdExistsAsync(int id);
-        Task Delete(int id);
+        Task<bool> Delete(int id);
     }
 }

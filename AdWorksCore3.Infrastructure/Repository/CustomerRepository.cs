@@ -2,6 +2,7 @@
 using AdWorksCore3.Core.Interfaces;
 using AdWorksCore3.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -13,14 +14,17 @@ namespace AdWorksCore3.Infrastructure.Repository
 {
     public class CustomerRepository : ICustomerRepository
     {
+        private readonly ILogger<CustomerRepository> logger;
         private readonly AdWorksContext context;
 
-        public CustomerRepository(AdWorksContext context)
+        public CustomerRepository(ILogger<CustomerRepository> logger, AdWorksContext context)
         {
+            this.logger = logger;
             this.context = context;
         }
         public async Task<Customer> AddAsync(Customer customer)
         {
+            logger.LogInformation("Adding new customer");
             try
             {
                 context.Customer.Add(customer);
@@ -29,23 +33,32 @@ namespace AdWorksCore3.Infrastructure.Repository
             }
             catch (DbUpdateConcurrencyException dbuce)
             {
-                //logger.LogError(dbuce, "Saving changes for new customer failed.");
-                Debug.WriteLine(dbuce, "Saving changes for new customer failed.");
+                logger.LogError(dbuce, "Saving changes for new customer failed.");
                 throw dbuce;
             }
             catch (DbUpdateException dbue)
             {
-                Debug.WriteLine(dbue, "Saving changes for new customer failed.");
+                logger.LogError(dbue, "Saving changes for new customer failed.");
                 throw dbue;
             }
         }
 
-        public async Task Delete(int id)
+        public async Task<bool> Delete(int id)
         {
             // trick EF to think its tracking a deleted object - then save changes
             Customer customer = new Customer() { CustomerId = id };
             context.Entry(customer).State = EntityState.Deleted;
-            await context.SaveChangesAsync();
+            try
+            {
+                int results = await context.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception e)
+            {
+                // Probably does not exist.
+                logger.LogWarning(e, $"Delete failed on Customer ID {id}");
+            }
+            return false;
         }
 
         public async Task<Customer> GetByIdAsync(int id)

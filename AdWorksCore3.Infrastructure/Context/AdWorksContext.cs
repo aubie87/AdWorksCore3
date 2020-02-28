@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AdWorksCore3.Core.Entities;
 using System.Reflection;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace AdWorksCore3.Infrastructure.Context
 {
@@ -19,6 +19,19 @@ namespace AdWorksCore3.Infrastructure.Context
             : base(options)
         {
             ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
+        }
+
+        private static readonly ILoggerFactory loggerFactory =
+            LoggerFactory.Create(builder =>
+            { 
+                builder.AddConsole();
+                builder.AddDebug();
+            });
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseLoggerFactory(loggerFactory);
         }
 
         public virtual DbSet<Address> Address { get; set; }
