@@ -59,6 +59,15 @@ namespace AdWorksCore3.Web
             {
                 app.UseDeveloperExceptionPage();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                
+                // redirects browsers to secure connection 
+                //  - WARNING: Web API clients generally don't support automatic redirection
+                //  - need to either not listen unsecurely or respond with 400 - Bad Request
+                //app.UseHsts();
+            }
 
             app.UseStaticFiles();
             app.UseRouting();
