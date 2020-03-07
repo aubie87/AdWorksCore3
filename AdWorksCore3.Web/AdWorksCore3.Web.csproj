@@ -19,5 +19,10 @@
     <ProjectReference Include="..\AdWorksCore3.Infrastructure\AdWorksCore3.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Shared\" />
+    <Folder Include="wwwroot\lib\" />
+  </ItemGroup>
+
 
 </Project>

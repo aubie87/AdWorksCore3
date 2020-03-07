@@ -8,7 +8,7 @@ using AdWorksCore3.Web.ViewModels;
 using AdWorksCore3.Core.Interfaces;
 using System;
 
-namespace AdWorksCore3.Web.Controllers
+namespace AdWorksCore3.Web.Controllers.Api
 {
     [ApiVersion("1.0")]
     [Route("api/[controller]")]

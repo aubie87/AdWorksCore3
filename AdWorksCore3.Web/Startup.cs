@@ -30,6 +30,7 @@ namespace AdWorksCore3.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddRazorPages();
             services.AddApiVersioning(opt =>
             {
                 opt.ReportApiVersions = true;
@@ -59,13 +60,17 @@ namespace AdWorksCore3.Web
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStaticFiles();
             app.UseRouting();
 
+            // must appear between UseRouting above and UseEndPoints below
+            //app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapRazorPages();
             });
         }
     }

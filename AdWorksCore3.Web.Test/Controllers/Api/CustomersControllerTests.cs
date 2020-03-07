@@ -1,7 +1,6 @@
 ﻿using AdWorksCore3.Core.Entities;
 using AdWorksCore3.Core.Interfaces;
-using AdWorksCore3.Web.Controllers;
-using AdWorksCore3.Web.Services;
+using AdWorksCore3.Web.Controllers.Api;
 using AdWorksCore3.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,11 +9,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace AdWorksCore3.Web.Test.Controllers
+namespace AdWorksCore3.Web.Test.Controllers.Api
 {
     public class CustomersControllerTests
     {

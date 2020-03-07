@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace AdWorksCore3.Web.Controllers
+namespace AdWorksCore3.Web.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
