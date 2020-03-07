@@ -26,8 +26,8 @@ namespace AdWorksCore3.Web.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CustomerGetViewModel>>> List()
         {
-            logger.LogInformation("Getting list of customers using viewmodel class - approx last 100 only, reverse Id order");
             var customerList = await repository.ListAsync();
+            logger.LogInformation($"Returning {customerList.Count()} customers, in reverse Id order.");
             return Ok(customerList.Select(c => CustomerGetViewModel.FromCustomerEntity(c)));
         }
 

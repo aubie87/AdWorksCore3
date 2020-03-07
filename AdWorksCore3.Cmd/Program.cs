@@ -5,6 +5,7 @@ using AdWorksCore3.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,14 +18,21 @@ namespace AdWorksCore3.Cmd
         {
             var services = ConfigureServices();
             var serviceProvider = services.BuildServiceProvider();
-            await serviceProvider.GetService<App>().RunAsync();
+            //await serviceProvider.GetService<App>().RunAsync();
+
+            // initialize a new instance that implements the interface
+            ICustomerRepository repo = serviceProvider.GetService<ICustomerRepository>();
+            Console.WriteLine($"Does 1 exist: {await repo.IdExistsAsync(1)}");
         }
 
         private static IServiceCollection ConfigureServices()
         {
             var services = new ServiceCollection();
-            var config = LoadConfiguration();
 
+            // required for AdWorksContext below - should be locally configured
+            services.AddLogging();
+
+            var config = LoadConfiguration();
             services.AddSingleton(config);
             services.AddTransient<App>();
             services.AddDbContext<AdWorksContext>(opt => opt
