@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using AdWorksCore3.Core.Interfaces;
 using System.Linq;
 using System;
+using AdWorksCore3.Web.ResourceParameters;
 
 namespace AdWorksCore3.Web.Controllers.Api
 {
@@ -24,7 +25,8 @@ namespace AdWorksCore3.Web.Controllers.Api
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CustomerGetViewModel>>> List()
+        public async Task<ActionResult<IEnumerable<CustomerGetViewModel>>> GetPage(
+            [FromQuery] CustomersParameters customerParameters)
         {
             var customerList = await repository.ListAsync();
             logger.LogInformation($"Returning {customerList.Count()} customers, in reverse Id order.");

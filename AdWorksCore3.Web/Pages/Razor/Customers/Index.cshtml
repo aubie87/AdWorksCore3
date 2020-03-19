@@ -1,0 +1,35 @@
+﻿@page
+@model AdWorksCore3.Web.Pages.Razor.Customers.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Customer List</h1>
+
+<div>Search for Customers</div>
+<form method="get">
+    <div class="form-group">
+        <div class="input-group">
+            <input type="search" class="form-control" value="" />
+            <span class="input-group-btn">
+                <button class="btn btn-default">Search</button>
+            </span>
+        </div>
+    </div>
+</form>
+
+<table>
+    <thead>
+        <tr>First Name</tr>
+        <tr>Last Name</tr>
+    </thead>
+    <tbody>
+        @foreach (var customer in @Model.CustomerList)
+        {
+            <tr>
+                <td>@customer.FirstName</td>
+                <td>@customer.LastName</td>
+            </tr>
+        }
+    </tbody>
+</table>
