@@ -17,7 +17,7 @@ namespace AdWorksCore3.Web.ViewModels
         public string StateProvince { get; set; }
         public string Country { get; set; }
         public string PostalCode { get; set; }
-        public DateTime ModifiedDate { get; set; }
+        public DateTime LastModified { get; set; }
 
         internal static AddressGetViewModel FromAddressEntity(CustomerAddress address)
         {
@@ -31,7 +31,7 @@ namespace AdWorksCore3.Web.ViewModels
                 StateProvince = address.Address.StateProvince,
                 PostalCode = address.Address.PostalCode,
                 Country = address.Address.CountryRegion,
-                ModifiedDate = address.Address.ModifiedDate
+                LastModified = address.Address.ModifiedDate
             };
         }
     }

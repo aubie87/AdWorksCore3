@@ -12,13 +12,13 @@ namespace AdWorksCore3.Web.ResourceParameters
     /// </summary>
     public class CustomersParameters
     {
+        public const int MaxPageSize = 50;
         public int PageNumber { get; set; } = 1;
         public int PageSize
         {
             get => this.pageSize;
-            set => this.pageSize = (value > maxPageSize) ? maxPageSize : value;
+            set => this.pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
-        const int maxPageSize = 50;
         private int pageSize;
     }
 }

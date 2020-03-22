@@ -9,6 +9,7 @@ using AdWorksCore3.Core.Interfaces;
 using System.Linq;
 using System;
 using AdWorksCore3.Web.ResourceParameters;
+using AutoMapper;
 
 namespace AdWorksCore3.Web.Controllers.Api
 {
@@ -16,12 +17,28 @@ namespace AdWorksCore3.Web.Controllers.Api
     public class CustomersController : AdWorksControllerBase
     {
         private readonly ILogger<CustomersController> logger;
+        private readonly IMapper mapper;
         private readonly ICustomerRepository repository;
 
-        public CustomersController(ILogger<CustomersController> logger, ICustomerRepository context)
+        public CustomersController(ILogger<CustomersController> logger, IMapper mapper, ICustomerRepository context)
         {
             this.logger = logger;
+            this.mapper = mapper;
             this.repository = context;
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CustomerGetViewModel>> GetById(int id)
+        {
+            logger.LogInformation($"Get customer where id = {id}");
+            Customer customer = await repository.GetByIdAsync(id);
+            if (null == customer)
+            {
+                return NotFound(id);
+            }
+
+            CustomerGetViewModel vm = mapper.Map<CustomerGetViewModel>(customer);
+            return Ok(vm);
         }
 
         [HttpGet]
@@ -30,31 +47,19 @@ namespace AdWorksCore3.Web.Controllers.Api
         {
             var customerList = await repository.ListAsync();
             logger.LogInformation($"Returning {customerList.Count()} customers, in reverse Id order.");
-            return Ok(customerList.Select(c => CustomerGetViewModel.FromCustomerEntity(c)));
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<CustomerGetViewModel>> GetById(int id)
-        {
-            logger.LogInformation($"Get customer where id = {id}");
-            Customer customer = await repository.GetByIdAsync(id);
-            if(null == customer)
-            {
-                return NotFound(id);
-            }
-            CustomerGetViewModel vm = CustomerGetViewModel.FromCustomerEntity(customer);
-            return Ok(vm);
+            //return Ok(customerList.Select(c => CustomerGetViewModel.FromCustomerEntity(c)));
+            return Ok(mapper.Map<IEnumerable<CustomerGetViewModel>>(customerList));
         }
 
         [HttpPost]
         public async Task<ActionResult<CustomerGetViewModel>> Create([FromBody] CustomerUpdateViewModel updateVm)
         {
-            Customer customerDb = CustomerUpdateViewModel.ToCustomerEntity(updateVm);
-            customerDb = PasswordService.GenerateNewHash(customerDb, customerDb.FirstName + customerDb.LastName);
+            Customer customer = mapper.Map<Customer>(updateVm);
+            customer = PasswordService.GenerateNewHash(customer, customer.FirstName + customer.LastName);
             try
             {
-                customerDb = await repository.AddAsync(customerDb);
-                CustomerGetViewModel getVm = CustomerGetViewModel.FromCustomerEntity(customerDb);
+                customer = await repository.AddAsync(customer);
+                CustomerGetViewModel getVm = mapper.Map<CustomerGetViewModel>(customer);
                 return CreatedAtAction(nameof(GetById), new { id = getVm.Id }, getVm);
             }
             catch (Exception e)
@@ -74,7 +79,7 @@ namespace AdWorksCore3.Web.Controllers.Api
                 return NotFound();
             }
 
-            customer = CustomerUpdateViewModel.ToCustomerEntity(customer, vm);
+            mapper.Map(vm, customer);
             await repository.UpdateAsync(customer);
 
             return NoContent();

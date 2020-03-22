@@ -1,19 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AdWorksCore3.Core.Interfaces;
-using AdWorksCore3.Infrastructure;
-using AdWorksCore3.Web.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using System;
 
 namespace AdWorksCore3.Web
 {
@@ -29,7 +22,12 @@ namespace AdWorksCore3.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers(opt =>
+            {
+               opt.ReturnHttpNotAcceptable = true;      // explicity returns an error when requesting an unsupported media type
+            });
+                // .AddXmlDataContractSerializerFormatters();  // adds XML result support but exposes view model name
+
             services.AddRazorPages();
             services.AddApiVersioning(opt =>
             {
@@ -43,6 +41,8 @@ namespace AdWorksCore3.Web
                 opt.LowercaseUrls = true;
                 opt.LowercaseQueryStrings = true;
             });
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             Infrastructure.Infrastructure.ConfigureServices(Configuration, services);
         }

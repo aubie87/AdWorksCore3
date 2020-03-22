@@ -1,7 +1,10 @@
 ﻿using AdWorksCore3.Core.Entities;
 using AdWorksCore3.Core.Interfaces;
 using AdWorksCore3.Web.Controllers.Api;
+using AdWorksCore3.Web.Mappings;
+using AdWorksCore3.Web.ResourceParameters;
 using AdWorksCore3.Web.ViewModels;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -16,6 +19,18 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
 {
     public class CustomersControllerTests
     {
+        private readonly Mapper mapper;
+
+        public CustomersControllerTests()
+        {
+            var mapConfig = new MapperConfiguration(opt =>
+            {
+                opt.AddProfile<CustomersProfile>();
+                opt.AddProfile<AddressProfile>();
+            });
+
+            mapper = new Mapper(mapConfig);
+        }
         [Fact]
         public async Task ForCustomer_ReturnHttpNotFound_ForInvalidId()
         {
@@ -23,7 +38,7 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
             int invalidId = 99999;
             var mockLogger = new Mock<ILogger<CustomersController>>();
             var mockRepository = new Mock<ICustomerRepository>();
-            var controller = new CustomersController(mockLogger.Object, mockRepository.Object);
+            var controller = new CustomersController(mockLogger.Object, mapper, mockRepository.Object);
 
             // Act
             var result = await controller.GetById(invalidId);
@@ -42,7 +57,7 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
             var mockRepository = new Mock<ICustomerRepository>();
             mockRepository.Setup(repo => repo.GetByIdAsync(validId))
                 .ReturnsAsync(GetTestCustomer(validId));
-            var controller = new CustomersController(mockLogger.Object, mockRepository.Object);
+            var controller = new CustomersController(mockLogger.Object, mapper, mockRepository.Object);
 
             // Act
             var result = await controller.GetById(validId);
@@ -61,10 +76,10 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
             var mockRepository = new Mock<ICustomerRepository>();
             mockRepository.Setup(repo => repo.ListAsync())
                 .ReturnsAsync(GetTestCustomerList(count));
-            var controller = new CustomersController(mockLogger.Object, mockRepository.Object);
+            var controller = new CustomersController(mockLogger.Object, mapper, mockRepository.Object);
 
             // Act
-            var result = await controller.List();
+            var result = await controller.GetPage(new CustomersParameters());
 
             // Assert
             var apiResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -83,7 +98,7 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
             // Tell Moq to match on any customer instance
             mockRepository.Setup(repo => repo.AddAsync(It.IsAny<Customer>()))
                 .ReturnsAsync(retCustomer);
-            var controller = new CustomersController(mockLogger.Object, mockRepository.Object);
+            var controller = new CustomersController(mockLogger.Object, mapper, mockRepository.Object);
 
             // Act
             var result = await controller.Create(CustomerUpdateViewModel.FromCustomerEntity(GetTestUpdate()));
