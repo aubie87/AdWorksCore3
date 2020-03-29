@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AdWorksCore3.Core.Entities;
 using AdWorksCore3.Core.Interfaces;
+using AdWorksCore3.Web.ResourceParameters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -22,9 +23,9 @@ namespace AdWorksCore3.Web.Pages.Razor.Customers
             this.repository = repository;
             this.logger = logger;
         }
-        public async Task OnGet()
+        public async Task OnGet(CustomersParameters parameters)
         {
-            CustomerList = await repository.ListAsync();
+            CustomerList = await repository.ListAsync(parameters);
             logger.LogInformation($"CustomerList count={CustomerList.Count()}");
         }
     }

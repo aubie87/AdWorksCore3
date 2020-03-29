@@ -10,6 +10,8 @@ using System.Linq;
 using System;
 using AdWorksCore3.Web.ResourceParameters;
 using AutoMapper;
+using X.PagedList;
+using AdWorksCore3.Core.Services;
 
 namespace AdWorksCore3.Web.Controllers.Api
 {
@@ -41,14 +43,15 @@ namespace AdWorksCore3.Web.Controllers.Api
             return Ok(vm);
         }
 
-        [HttpGet]
+        [HttpGet(Name = "GetCustomers")]
         public async Task<ActionResult<IEnumerable<CustomerGetViewModel>>> GetPage(
             [FromQuery] CustomersParameters customerParameters)
         {
-            var customerList = await repository.ListAsync();
-            logger.LogInformation($"Returning {customerList.Count()} customers, in reverse Id order.");
-            //return Ok(customerList.Select(c => CustomerGetViewModel.FromCustomerEntity(c)));
-            return Ok(mapper.Map<IEnumerable<CustomerGetViewModel>>(customerList));
+            var pagedList = await repository.ListAsync(customerParameters);
+            var metaData = pagedList.GetMetaData();
+            AddHeaders("GetCustomers", pagedList, customerParameters);
+
+            return Ok(mapper.Map<IEnumerable<CustomerGetViewModel>>(pagedList));
         }
 
         [HttpPost]

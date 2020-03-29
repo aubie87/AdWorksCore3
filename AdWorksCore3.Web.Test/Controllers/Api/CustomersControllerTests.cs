@@ -1,5 +1,6 @@
 ﻿using AdWorksCore3.Core.Entities;
 using AdWorksCore3.Core.Interfaces;
+using AdWorksCore3.Core.Services;
 using AdWorksCore3.Web.Controllers.Api;
 using AdWorksCore3.Web.Mappings;
 using AdWorksCore3.Web.ResourceParameters;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 using Xunit;
 
 namespace AdWorksCore3.Web.Test.Controllers.Api
@@ -74,8 +76,8 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
             int count = 5;
             var mockLogger = new Mock<ILogger<CustomersController>>();
             var mockRepository = new Mock<ICustomerRepository>();
-            mockRepository.Setup(repo => repo.ListAsync())
-                .ReturnsAsync(GetTestCustomerList(count));
+            mockRepository.Setup(repo => repo.ListAsync(new CustomersParameters()))
+                .ReturnsAsync(await GetTestCustomerList(count));
             var controller = new CustomersController(mockLogger.Object, mapper, mockRepository.Object);
 
             // Act
@@ -109,6 +111,27 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
             Assert.Equal(newId, model.Id);
         }
 
+        [Fact]
+        public async Task CustomerList_ShouldReturn_PagedList()
+        {
+            int count = 5;
+            var mockLogger = new Mock<ILogger<CustomersController>>();
+            var mockRepository = new Mock<ICustomerRepository>();
+            mockRepository.Setup(repo => repo.ListAsync(new CustomersParameters()))
+                .ReturnsAsync(await GetTestCustomerList(count));
+            var controller = new CustomersController(mockLogger.Object, mapper, mockRepository.Object);
+
+            var customerParams = new CustomersParameters { PageNumber = 2, PageSize = 2 };
+
+            // Act
+            var result = await controller.GetPage(customerParams);
+
+            // Assert
+            var apiResult = Assert.IsType<OkObjectResult>(result.Result);
+            var model = Assert.IsAssignableFrom<IEnumerable<CustomerGetViewModel>>(apiResult.Value);
+            Assert.Equal(customerParams.PageSize, model.Count());
+        }
+
         private Customer GetTestUpdate()
         {
             Debug.WriteLine("GetTestUpdate - no ID");
@@ -129,15 +152,15 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
             return customer;
         }
 
-        private IEnumerable<Customer> GetTestCustomerList(int count)
+        private async Task<IPagedList<Customer>> GetTestCustomerList(int count)
         {
-            List<Customer> list = new List<Customer>(count);
+            IList<Customer> list = new List<Customer>(count);
             int startingId = 101;
             for(int i = startingId; i< startingId+count; i++)
             {
                 list.Add(GetTestCustomer(i));
             }
-            return list;
+            return await list.ToPagedListAsync<Customer>(1, 50);
         }
     }
 }

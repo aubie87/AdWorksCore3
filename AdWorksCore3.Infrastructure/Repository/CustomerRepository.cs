@@ -1,5 +1,6 @@
 ﻿using AdWorksCore3.Core.Entities;
 using AdWorksCore3.Core.Interfaces;
+using AdWorksCore3.Core.Services;
 using AdWorksCore3.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace AdWorksCore3.Infrastructure.Repository
 {
@@ -75,14 +77,15 @@ namespace AdWorksCore3.Infrastructure.Repository
             return await context.Customer.FindAsync(id) != null;
         }
 
-        public async Task<IEnumerable<Customer>> ListAsync()
+        public async Task<IPagedList<Customer>> ListAsync(QueryStringParameters parameters)
         {
-            return await context.Customer
-                .Skip(700)
-                .OrderByDescending(o => o.CustomerId)
+            var query = context.Customer
                 .Include(c => c.CustomerAddress)
                 .ThenInclude(ca => ca.Address)
-                .ToListAsync();
+                .OrderBy(c => c.CustomerId);
+
+            var pagedList = await query.ToPagedListAsync(parameters.PageNumber, parameters.PageSize);
+            return pagedList;
         }
 
         public async Task UpdateAsync(Customer customer)

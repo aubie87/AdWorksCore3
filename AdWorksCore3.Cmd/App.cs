@@ -28,17 +28,17 @@ namespace AdWorksCore3.Cmd
             //await ShowCustomer(35121);
             await UpdateCustomer(35121);
         }
-        private async Task ListCustomers()
-        {
-            var customerList = await repository.ListAsync();
-            int count = 0;
-            foreach (var customer in customerList)
-            {
-                LogCustomer(customer);
-                count++;
-            }
-            Console.WriteLine($"There are {count} active customers");
-        }
+        //private async Task ListCustomers()
+        //{
+        //    var customerList = await repository.ListAsync();
+        //    int count = 0;
+        //    foreach (var customer in customerList)
+        //    {
+        //        LogCustomer(customer);
+        //        count++;
+        //    }
+        //    Console.WriteLine($"There are {count} active customers");
+        //}
         private async Task UpdateCustomer(int id)
         {
             Customer customer = await repository.GetByIdAsync(id);
