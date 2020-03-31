@@ -12,10 +12,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
 
             builder.HasComment("Product descriptions in several languages.");
 
-            builder.HasIndex(e => e.Rowguid)
-                .HasName("AK_ProductDescription_rowguid")
-                .IsUnique();
-
             builder.Property(e => e.ProductDescriptionId)
                 .HasColumnName("ProductDescriptionID")
                 .HasComment("Primary key for ProductDescription records.");
@@ -29,11 +25,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())")
                 .HasComment("Date and time the record was last updated.");
-
-            builder.Property(e => e.Rowguid)
-                .HasColumnName("rowguid")
-                .HasDefaultValueSql("(newid())")
-                .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
         }
     }
 }

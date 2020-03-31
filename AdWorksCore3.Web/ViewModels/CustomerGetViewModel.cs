@@ -1,9 +1,5 @@
-﻿using AdWorksCore3.Core.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdWorksCore3.Web.ViewModels
 {
@@ -15,31 +11,10 @@ namespace AdWorksCore3.Web.ViewModels
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Suffix { get; set; }
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
         public string Phone { get; set; }
+        public string CompanyName { get; set; }
         public DateTime LastModified { get; set; }
         public ICollection<AddressGetViewModel> Addresses { get; set; } = new List<AddressGetViewModel>();
-
-        /// <summary>
-        /// Until we add an auto-mapping library we will use this style.
-        /// </summary>
-        /// <param name="customer"></param>
-        /// <returns></returns>
-        public static CustomerGetViewModel FromCustomerEntity(Customer customer)
-        {
-            return new CustomerGetViewModel
-            {
-                Id = customer.CustomerId,
-                FirstName = customer.FirstName,
-                MiddleName = customer.MiddleName,
-                LastName = customer.LastName,
-                EmailAddress = customer.EmailAddress,
-                LastModified = customer.ModifiedDate,
-                Phone = customer.Phone,
-                Suffix = customer.Suffix,
-                Title = customer.Title,
-                Addresses = customer.CustomerAddress.Select(a => AddressGetViewModel.FromAddressEntity(a)).ToList()
-            };
-        }
     }
 }

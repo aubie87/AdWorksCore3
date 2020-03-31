@@ -25,7 +25,7 @@ namespace AdWorksCore3.Core.Entities
         public DateTime? DiscontinuedDate { get; set; }
         public byte[] ThumbNailPhoto { get; set; }
         public string ThumbnailPhotoFileName { get; set; }
-        public Guid Rowguid { get; set; }
+        //public Guid Rowguid { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         public virtual ProductCategory ProductCategory { get; set; }

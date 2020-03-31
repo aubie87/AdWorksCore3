@@ -18,9 +18,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
             builder.HasIndex(e => e.ProductNumber)
                 .HasName("AK_Product_ProductNumber")
                 .IsUnique();
-            builder.HasIndex(e => e.Rowguid)
-                .HasName("AK_Product_rowguid")
-                .IsUnique();
 
             builder.Property(e => e.ProductId)
                 .HasColumnName("ProductID")
@@ -52,10 +49,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
                 .IsRequired()
                 .HasMaxLength(25)
                 .HasComment("Unique product identification number.");
-            builder.Property(e => e.Rowguid)
-                .HasColumnName("rowguid")
-                .HasDefaultValueSql("(newid())")
-                .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
             builder.Property(e => e.SellEndDate)
                 .HasColumnType("datetime")
                 .HasComment("Date the product was no longer available for sale.");

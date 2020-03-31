@@ -10,9 +10,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
         {
             builder.ToTable("Address", "SalesLT");
             builder.HasComment("Street address information for customers.");
-            builder.HasIndex(e => e.Rowguid)
-                    .HasName("AK_Address_rowguid")
-                    .IsUnique();
             builder.HasIndex(e => e.StateProvince);
             builder.HasIndex(e => new { e.AddressLine1, e.AddressLine2, e.City, e.StateProvince, e.PostalCode, e.CountryRegion });
             builder.Property(e => e.AddressId)
@@ -46,11 +43,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
                 .IsRequired()
                 .HasMaxLength(15)
                 .HasComment("Postal code for the street address.");
-
-            builder.Property(e => e.Rowguid)
-                .HasColumnName("rowguid")
-                .HasDefaultValueSql("(newid())")
-                .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
 
             builder.Property(e => e.StateProvince)
                 .IsRequired()

@@ -30,7 +30,7 @@ namespace AdWorksCore3.Core.Entities
         public decimal Freight { get; set; }
         public decimal TotalDue { get; set; }
         public string Comment { get; set; }
-        public Guid Rowguid { get; set; }
+        //public Guid Rowguid { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         public virtual Address BillToAddress { get; set; }

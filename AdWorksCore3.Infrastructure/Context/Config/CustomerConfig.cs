@@ -13,9 +13,9 @@ namespace AdWorksCore3.Infrastructure.Context.Config
             builder.HasComment("Customer information.");
 
             builder.HasIndex(e => e.EmailAddress);
-            builder.HasIndex(e => e.Rowguid)
-                .HasName("AK_Customer_rowguid")
-                .IsUnique();
+            //builder.HasIndex(e => e.Rowguid)
+            //    .HasName("AK_Customer_rowguid")
+            //    .IsUnique();
 
             builder.Property(e => e.CustomerId)
                 .HasColumnName("CustomerID")
@@ -56,10 +56,10 @@ namespace AdWorksCore3.Infrastructure.Context.Config
             builder.Property(e => e.Phone)
                 .HasMaxLength(25)
                 .HasComment("Phone number associated with the person.");
-            builder.Property(e => e.Rowguid)
-                .HasColumnName("rowguid")
-                .HasDefaultValueSql("(newid())")
-                .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
+            //builder.Property(e => e.Rowguid)
+            //    .HasColumnName("rowguid")
+            //    .HasDefaultValueSql("(newid())")
+            //    .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
             builder.Property(e => e.SalesPerson)
                 .HasMaxLength(256)
                 .HasComment("The customer's sales person, an employee of AdventureWorks Cycles.");

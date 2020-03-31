@@ -17,8 +17,10 @@ namespace AdWorksCore3.Web
         public string Suffix { get; set; }
         [Required]
         [EmailAddress]
-        public string EmailAddress { get; set; }
+        public string Email { get; set; }
         public string Phone { get; set; }
+        public string CompanyName { get; set; }
+
 
         public static CustomerUpdateViewModel FromCustomerEntity(Customer customer)
         {
@@ -29,7 +31,7 @@ namespace AdWorksCore3.Web
                 MiddleName = customer.MiddleName,
                 LastName = customer.LastName,
                 Suffix = customer.Suffix,
-                EmailAddress = customer.EmailAddress,
+                Email = customer.EmailAddress,
                 Phone = customer.Phone
             };
         }

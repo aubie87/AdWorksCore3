@@ -148,7 +148,7 @@ namespace AdWorksCore3.Web.Test.Controllers.Api
             Debug.WriteLine("GetTestCustomer - with id=" + id);
             Customer customer = GetTestUpdate();
             customer.CustomerId = id;
-            customer.Rowguid = Guid.Parse("48919bc6-1c78-41e7-b2c9-3804dc49c552");
+            //customer.Rowguid = Guid.Parse("48919bc6-1c78-41e7-b2c9-3804dc49c552");
             return customer;
         }
 

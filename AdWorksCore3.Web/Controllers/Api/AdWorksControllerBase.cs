@@ -15,13 +15,16 @@ namespace AdWorksCore3.Web.Controllers.Api
             Response.Headers.Add("X-TotalCount", pagedList.TotalItemCount.ToString());
             Response.Headers.Add("X-ItemCount", (pagedList.LastItemOnPage - pagedList.FirstItemOnPage + 1).ToString());
 
+            // need to add filter parameters
+
             if (pagedList.HasNextPage)
             {
                 string nextUrl = Url.Link(routeName,
                     new
                     {
                         pageNumber = parameters.PageNumber + 1,
-                        pageSize = parameters.PageSize
+                        pageSize = parameters.PageSize,
+                        search = parameters.SearchQuery
                     });
                 Response.Headers.Add("X-PageNext", nextUrl);
             }
@@ -31,7 +34,8 @@ namespace AdWorksCore3.Web.Controllers.Api
                     new
                     {
                         pageNumber = parameters.PageNumber - 1,
-                        pageSize = parameters.PageSize
+                        pageSize = parameters.PageSize,
+                        search = parameters.SearchQuery
                     });
                 Response.Headers.Add("X-PagePrev", prevUrl);
             }

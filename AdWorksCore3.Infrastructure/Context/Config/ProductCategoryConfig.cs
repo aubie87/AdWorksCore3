@@ -16,10 +16,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
                 .HasName("AK_ProductCategory_Name")
                 .IsUnique();
 
-            builder.HasIndex(e => e.Rowguid)
-                .HasName("AK_ProductCategory_rowguid")
-                .IsUnique();
-
             builder.Property(e => e.ProductCategoryId)
                 .HasColumnName("ProductCategoryID")
                 .HasComment("Primary key for ProductCategory records.");
@@ -37,11 +33,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
             builder.Property(e => e.ParentProductCategoryId)
                 .HasColumnName("ParentProductCategoryID")
                 .HasComment("Product category identification number of immediate ancestor category. Foreign key to ProductCategory.ProductCategoryID.");
-
-            builder.Property(e => e.Rowguid)
-                .HasColumnName("rowguid")
-                .HasDefaultValueSql("(newid())")
-                .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
 
             builder.HasOne(d => d.ParentProductCategory)
                 .WithMany(p => p.InverseParentProductCategory)

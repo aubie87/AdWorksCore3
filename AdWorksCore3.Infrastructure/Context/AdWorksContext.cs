@@ -66,10 +66,6 @@ namespace AdWorksCore3.Infrastructure.Context
 
                 entity.HasIndex(e => e.ProductId);
 
-                entity.HasIndex(e => e.Rowguid)
-                    .HasName("AK_SalesOrderDetail_rowguid")
-                    .IsUnique();
-
                 entity.Property(e => e.SalesOrderId)
                     .HasColumnName("SalesOrderID")
                     .HasComment("Primary key. Foreign key to SalesOrderHeader.SalesOrderID.");
@@ -94,11 +90,6 @@ namespace AdWorksCore3.Infrastructure.Context
                 entity.Property(e => e.ProductId)
                     .HasColumnName("ProductID")
                     .HasComment("Product sold to customer. Foreign key to Product.ProductID.");
-
-                entity.Property(e => e.Rowguid)
-                    .HasColumnName("rowguid")
-                    .HasDefaultValueSql("(newid())")
-                    .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
 
                 entity.Property(e => e.UnitPrice)
                     .HasColumnType("money")
@@ -128,10 +119,6 @@ namespace AdWorksCore3.Infrastructure.Context
                 entity.HasComment("General sales order information.");
 
                 entity.HasIndex(e => e.CustomerId);
-
-                entity.HasIndex(e => e.Rowguid)
-                    .HasName("AK_SalesOrderHeader_rowguid")
-                    .IsUnique();
 
                 entity.HasIndex(e => e.SalesOrderNumber)
                     .HasName("AK_SalesOrderHeader_SalesOrderNumber")
@@ -189,11 +176,6 @@ namespace AdWorksCore3.Infrastructure.Context
                     .HasComment("Customer purchase order number reference. ");
 
                 entity.Property(e => e.RevisionNumber).HasComment("Incremental number to track changes to the sales order over time.");
-
-                entity.Property(e => e.Rowguid)
-                    .HasColumnName("rowguid")
-                    .HasDefaultValueSql("(newid())")
-                    .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
 
                 entity.Property(e => e.SalesOrderNumber)
                     .IsRequired()
@@ -339,8 +321,6 @@ namespace AdWorksCore3.Infrastructure.Context
                     .HasMaxLength(256);
 
                 entity.Property(e => e.RiderExperience).HasMaxLength(1024);
-
-                entity.Property(e => e.Rowguid).HasColumnName("rowguid");
 
                 entity.Property(e => e.Saddle).HasMaxLength(256);
 

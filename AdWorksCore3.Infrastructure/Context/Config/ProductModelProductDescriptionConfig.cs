@@ -15,10 +15,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
 
             builder.HasComment("Cross-reference table mapping product descriptions and the language the description is written in.");
 
-            builder.HasIndex(e => e.Rowguid)
-                .HasName("AK_ProductModelProductDescription_rowguid")
-                .IsUnique();
-
             builder.Property(e => e.ProductModelId)
                 .HasColumnName("ProductModelID")
                 .HasComment("Primary key. Foreign key to ProductModel.ProductModelID.");
@@ -33,9 +29,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())")
                 .HasComment("Date and time the record was last updated.");
-            builder.Property(e => e.Rowguid)
-                .HasColumnName("rowguid")
-                .HasDefaultValueSql("(newid())");
 
             builder.HasOne(d => d.ProductDescription)
                 .WithMany(p => p.ProductModelProductDescription)

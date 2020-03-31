@@ -15,9 +15,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
             builder.HasIndex(e => e.Name)
                 .HasName("AK_ProductModel_Name")
                 .IsUnique();
-            builder.HasIndex(e => e.Rowguid)
-                .HasName("AK_ProductModel_rowguid")
-                .IsUnique();
 
             builder.Property(e => e.ProductModelId)
                 .HasColumnName("ProductModelID");
@@ -29,9 +26,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
             builder.Property(e => e.Name)
                 .IsRequired()
                 .HasMaxLength(50);
-            builder.Property(e => e.Rowguid)
-                .HasColumnName("rowguid")
-                .HasDefaultValueSql("(newid())");
         }
     }
 }

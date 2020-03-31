@@ -12,7 +12,7 @@ namespace AdWorksCore3.Core.Entities
 
         public int ProductDescriptionId { get; set; }
         public string Description { get; set; }
-        public Guid Rowguid { get; set; }
+        //public Guid Rowguid { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         public virtual ICollection<ProductModelProductDescription> ProductModelProductDescription { get; set; }

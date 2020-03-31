@@ -12,7 +12,7 @@ namespace AdWorksCore3.Core.Entities
         public decimal UnitPrice { get; set; }
         public decimal UnitPriceDiscount { get; set; }
         public decimal LineTotal { get; set; }
-        public Guid Rowguid { get; set; }
+        //public Guid Rowguid { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         public virtual Product Product { get; set; }

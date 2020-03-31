@@ -19,7 +19,7 @@ namespace AdWorksCore3.Core.Entities
         public string StateProvince { get; set; }
         public string CountryRegion { get; set; }
         public string PostalCode { get; set; }
-        public Guid Rowguid { get; set; }
+        //public Guid Rowguid { get; set; }
         public DateTime ModifiedDate { get; set; }
 
         public virtual ICollection<CustomerAddress> CustomerAddress { get; set; }

@@ -15,10 +15,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
 
             builder.HasComment("Cross-reference table mapping customers to their address(es).");
 
-            builder.HasIndex(e => e.Rowguid)
-                .HasName("AK_CustomerAddress_rowguid")
-                .IsUnique();
-
             builder.Property(e => e.CustomerId)
                 .HasColumnName("CustomerID")
                 .HasComment("Primary key. Foreign key to Customer.CustomerID.");
@@ -33,10 +29,6 @@ namespace AdWorksCore3.Infrastructure.Context.Config
                 .HasColumnType("datetime")
                 .HasDefaultValueSql("(getdate())")
                 .HasComment("Date and time the record was last updated.");
-            builder.Property(e => e.Rowguid)
-                .HasColumnName("rowguid")
-                .HasDefaultValueSql("(newid())")
-                .HasComment("ROWGUIDCOL number uniquely identifying the record. Used to support a merge replication sample.");
 
             builder.HasOne(d => d.Address)
                 .WithMany(p => p.CustomerAddress)
