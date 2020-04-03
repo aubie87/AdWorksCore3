@@ -19,6 +19,7 @@ namespace AdWorksCore3.Core.Services
         {
             MaxPageSize = maxPageSize;
             pageSize = MaxPageSize;
+            OrderByQuery = "";
         }
         public int PageNumber { get; set; } = 1;
         public int PageSize
@@ -33,12 +34,21 @@ namespace AdWorksCore3.Core.Services
             return query;
         }
 
+        public abstract object GetNextPageQueryString();
+        public abstract object GetPrevPageQueryString();
+
+        [FromQuery(Name = "search")]
+        public string SearchQuery { get; set; }
         public virtual IQueryable<Customer> Search(IQueryable<Customer> query)
         {
             return query;
         }
-        [FromQuery(Name = "search")]
-        public string SearchQuery { get; set; }
 
+        [FromQuery(Name = "orderby")]
+        public string OrderByQuery { get; set; }
+        public virtual IQueryable<Customer> OrderBy(IQueryable<Customer> query)
+        {
+            return query;
+        }
     }
 }

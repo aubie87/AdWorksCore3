@@ -1,5 +1,6 @@
 ﻿using AdWorksCore3.Core.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using X.PagedList;
 
 namespace AdWorksCore3.Web.Controllers.Api
@@ -19,24 +20,12 @@ namespace AdWorksCore3.Web.Controllers.Api
 
             if (pagedList.HasNextPage)
             {
-                string nextUrl = Url.Link(routeName,
-                    new
-                    {
-                        pageNumber = parameters.PageNumber + 1,
-                        pageSize = parameters.PageSize,
-                        search = parameters.SearchQuery
-                    });
+                string nextUrl = Url.Link(routeName, parameters.GetNextPageQueryString());
                 Response.Headers.Add("X-PageNext", nextUrl);
             }
             if (pagedList.HasPreviousPage)
             {
-                string prevUrl = Url.Link(routeName,
-                    new
-                    {
-                        pageNumber = parameters.PageNumber - 1,
-                        pageSize = parameters.PageSize,
-                        search = parameters.SearchQuery
-                    });
+                string prevUrl = Url.Link(routeName, parameters.GetPrevPageQueryString());
                 Response.Headers.Add("X-PagePrev", prevUrl);
             }
         }

@@ -84,10 +84,8 @@ namespace AdWorksCore3.Infrastructure.Repository
                 .ThenInclude(ca => ca.Address) as IQueryable<Customer>;
 
             query = parameters.Filter(query);
-
             query = parameters.Search(query);
-
-            query = query.OrderBy(c => c.CustomerId);
+            query = parameters.OrderBy(query);
 
             var pagedList = await query.ToPagedListAsync(parameters.PageNumber, parameters.PageSize);
             return pagedList;
